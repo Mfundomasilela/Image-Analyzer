@@ -1,14 +1,11 @@
-from dotenv import load_dotenv
 import streamlit as st
-from openai import OpenAI
-import os
+import openai
 from PIL import Image
 import io
 
-# Load environment variables
-load_dotenv()
-MODEL = 'gpt-4'  
-client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+# Directly set the API key
+api_key = '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'
+openai.api_key = api_key
 
 st.title('AI IMAGE ANALYZER')
 
@@ -25,11 +22,16 @@ if image_file:
     image.save(image_bytes, format=image.format)
     image_bytes.seek(0)
 
-    # Analyze image 
-    response = client.images.analysis.create(
-        model="pexels-thatguycraig000-1563356.jpg",  
-        file=image_bytes,
-    )
+    # Analyze image
+    try:
+        # Example: Placeholder for actual image processing logic
+        response = openai.Image.create(
+            file=image_bytes,
+            purpose="fine-tune"  # This is just an example, adjust based on actual OpenAI API capabilities
+        )
+        
+        # Display the response
+        st.markdown(response['data'])  # Adjust this based on actual response structure
 
-    # Display the response
-    st.markdown(response.choices[0].message.content)
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
